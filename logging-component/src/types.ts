@@ -1,15 +1,18 @@
-/**
-* Interface defining the component's options object
-*/
-export interface LoggingComponentOptions {
-  // Add the definitions here
+import { OperationArgs, Request } from '@loopback/rest'
+import { LogLevel } from './constants'
 
+interface IStandardLogMethod {
+  (message: string, ...meta: any[]): void
+  (message: any): void
 }
 
-/**
-* Default options for the component
-*/
-export const DEFAULT_LOGGING_COMPONENT_OPTIONS: LoggingComponentOptions = {
-  // Specify the values here
+interface IHttpLogMethod {
+  (level: LogLevel, request: Request, args: OperationArgs, responseData: any): void
+}
 
-};
+export interface ILogger {
+  error: IStandardLogMethod
+  warn: IStandardLogMethod
+  info: IStandardLogMethod
+  debug: IStandardLogMethod
+}

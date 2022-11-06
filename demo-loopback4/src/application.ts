@@ -6,7 +6,6 @@ import { RestApplication } from '@loopback/rest'
 import { ServiceMixin } from '@loopback/service-proxy'
 import path from 'path'
 import { LoggingSequence } from './sequence'
-import { LoggingProvider, LOGGING_PROVIDER_BINDING } from './providers'
 
 export { ApplicationConfig }
 
@@ -25,8 +24,6 @@ export class DemoLoopback4Application extends BootMixin(ServiceMixin(RepositoryM
       path: '/explorer',
     })
     this.component(RestExplorerComponent)
-
-    this.bind(LOGGING_PROVIDER_BINDING).toProvider(LoggingProvider)
 
     this.projectRoot = __dirname
     // Customize @loopback/boot Booter Conventions here

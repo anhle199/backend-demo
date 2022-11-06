@@ -10,9 +10,9 @@ import {
   SequenceHandler,
   InvokeMiddleware,
 } from '@loopback/rest'
-import { LoggingWrapper } from './logging-wrapper'
+import { getWinstonLogger, LoggingWrapper } from './logging-wrapper'
 
-const logger = new LoggingWrapper.HttpAccessLogger('sequence.ts')
+const logger = new LoggingWrapper.HttpAccessLogger(getWinstonLogger('sequence.ts'))
 
 export class LoggingSequence implements SequenceHandler {
   @inject(SequenceActions.INVOKE_MIDDLEWARE, { optional: true })

@@ -1,4 +1,4 @@
-import { format, LoggerOptions, transports } from 'winston'
+import { createLogger, format, LoggerOptions, transports } from 'winston'
 import 'winston-daily-rotate-file'
 
 const uppercasedLogLevel = format(info => {
@@ -15,9 +15,7 @@ const messageLogFormat = format.printf(info => {
 
 const defaultLogFormat = format.combine(
   uppercasedLogLevel(),
-  format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
-  format.simple(),
-  format.splat(),
+  format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }), // add 'timestamp' property to 'info' object
 )
 
 const consoleTransport = new transports.Console({
@@ -36,7 +34,16 @@ const fileTransport = new transports.DailyRotateFile({
   format: format.combine(defaultLogFormat, messageLogFormat),
 })
 
-export const WINSTON_LOGGER_OPTIONS: LoggerOptions = {
+const WINSTON_LOGGER_OPTIONS: LoggerOptions = {
   exitOnError: false,
   transports: [consoleTransport, fileTransport],
+}
+
+export const getWinstonLogger = (label = '') => {
+  const logger = createLogger(WINSTON_LOGGER_OPTIONS)
+  logger.defaultMeta = {
+    label: label,
+  }
+
+  return logger
 }

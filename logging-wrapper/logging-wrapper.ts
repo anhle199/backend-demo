@@ -2,6 +2,13 @@ import { OperationArgs, Request, Response } from '@loopback/rest'
 import _ from 'lodash'
 import { getWinstonLogger } from './winston-config'
 
+export const getLogger = (label = '') => {
+  return new LoggingWrapper.Logger(getWinstonLogger(label))
+}
+
+export const getHttpAccessLogger = (label = '') => {
+  return new LoggingWrapper.HttpAccessLogger(getWinstonLogger(label))
+}
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace LoggingWrapper {
@@ -104,13 +111,5 @@ export namespace LoggingWrapper {
 
       return stringifiedData
     }
-  }
-
-  export const getLogger = (logger?: ILogger) => {
-    return new Logger(logger ?? getWinstonLogger())
-  }
-
-  export const getHttpAccessLogger = (logger?: ILogger) => {
-    return new HttpAccessLogger(logger ?? getWinstonLogger())
   }
 }

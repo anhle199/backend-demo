@@ -29,7 +29,7 @@ const PING_RESPONSE: ResponseObject = {
   },
 }
 
-const logger = new LoggingWrapper.Logger(getWinstonLogger('ping.controller.ts'))
+const logger = LoggingWrapper.getLogger(getWinstonLogger('ping.controller.ts'))
 
 /**
  * A simple controller to bounce back http requests

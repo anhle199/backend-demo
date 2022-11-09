@@ -19,7 +19,6 @@ export namespace LoggingWrapper {
   export type THttpAccessLogData = {
     request: Request
     response: Response
-    args: OperationArgs | undefined
     result: TResponseData
     error: object | Error | undefined
     startTime: [number, number]
@@ -71,7 +70,7 @@ export namespace LoggingWrapper {
 
   export class HttpAccessLogger extends Logger {
     logHttpInfo(level: TLogLevel, data: THttpAccessLogData) {
-      const { request, response, args, result, error, startTime } = data
+      const { request, response, result, error, startTime } = data
 
       const method = request.method.toUpperCase()
       const url = request.url
@@ -80,7 +79,8 @@ export namespace LoggingWrapper {
       const endTime = process.hrtime(startTime)
       const processTimeInMs = (endTime[0] * 1000000000 + endTime[1]) / 1000000
 
-      const stringifiedRequestData = this.stringifyRequestResponseData(args)
+      const stringifiedQuery = this.stringifyRequestResponseData(request.query)
+      const stringifiedParams = this.stringifyRequestResponseData(request.params)
       let stringifiedResponseData = ''
 
       // cannot stringify to string
@@ -93,11 +93,16 @@ export namespace LoggingWrapper {
           details: _.get(error, 'details'), // possible undefined, only available on HttpErrors
         })
       } else {
-        stringifiedResponseData = this.stringifyRequestResponseData(result)
+        // omit url: **/explorer/.....      OpenAPI explorer
+        if (request.originalUrl.startsWith('/explorer/')) {
+          stringifiedResponseData = '[omitted]'
+        } else {
+          stringifiedResponseData = this.stringifyRequestResponseData(result)
+        }
       }
 
       this.log(level, `[${method}] ${url} HTTP/${version} ${statusCode} ${processTimeInMs.toFixed(3)}ms`)
-      this.log(level, `[REQUEST] ${stringifiedRequestData}`)
+      this.log(level, `[REQUEST]`, { query: stringifiedQuery }, { params: stringifiedParams })
       this.log(level, `[RESPONSE] ${stringifiedResponseData}`)
     }
 

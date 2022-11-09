@@ -10,6 +10,7 @@ import {
   SequenceHandler,
   InvokeMiddleware,
 } from '@loopback/rest'
+import _ from 'lodash'
 import { getHttpAccessLogger, LoggingWrapper } from './logging-wrapper'
 
 const logger = getHttpAccessLogger('sequence.ts')
@@ -34,7 +35,6 @@ export class LoggingSequence implements SequenceHandler {
     const logData: LoggingWrapper.THttpAccessLogData = {
       request,
       response,
-      args: undefined,
       result: undefined,
       error: undefined,
       startTime,
@@ -47,10 +47,7 @@ export class LoggingSequence implements SequenceHandler {
       }
 
       const route = this.findRoute(request)
-
       const args = await this.parseParams(request, route)
-      logData.args = args
-
       const result = await this.invoke(route, args)
       logData.result = result
 
@@ -59,7 +56,22 @@ export class LoggingSequence implements SequenceHandler {
       logLevel = 'error'
       logData.error = error
 
-      this.reject(context, error)
+      const statusCode = _.get(error, 'statusCode')
+      const status = _.get(error, 'status')
+
+      if (statusCode === 500 || status === 500) {
+        // prevent "reject" from sending the standard message for "internal server error"
+        // statuscode and status can be undefined
+        const internalServerError = {
+          error: {
+            statusCode,
+            message: _.get(error, 'message') ?? 'Internal Server Error',
+          },
+        }
+        this.send(response, internalServerError)
+      } else {
+        this.reject(context, error)
+      }
     }
 
     logger.logHttpInfo(logLevel, logData)

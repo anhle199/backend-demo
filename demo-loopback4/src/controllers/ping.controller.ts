@@ -1,5 +1,5 @@
 import { inject } from '@loopback/core'
-import { Request, RestBindings, get, response, ResponseObject, param, post, requestBody } from '@loopback/rest'
+import { Request, RestBindings, get, response, ResponseObject, param, post, requestBody, HttpErrors } from '@loopback/rest'
 import { getWinstonLogger, LoggingWrapper } from '../logging-wrapper'
 
 /**
@@ -45,8 +45,7 @@ export class PingController {
     logger.warn('Warning message')
     logger.info('Info message', 1, true, undefined, null, { a: 1 })
     logger.debug('Debug message')
-    const error = new Error('error')
-    logger.error(error)
+    throw new HttpErrors[500]('asd')
     return {
       greeting: 'Hello from LoopBack',
       date: new Date(),

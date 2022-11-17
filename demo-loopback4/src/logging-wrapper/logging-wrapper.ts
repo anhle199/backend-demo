@@ -80,7 +80,7 @@ export namespace LoggingWrapper {
       const processTimeInMs = (endTime[0] * 1000000000 + endTime[1]) / 1000000
 
       const stringifiedQuery = this.stringifyRequestResponseData(request.query)
-      const stringifiedParams = this.stringifyRequestResponseData(request.params)
+      const stringifiedBody = this.stringifyRequestResponseData(request.body)
       let stringifiedResponseData = ''
 
       // cannot stringify to string
@@ -102,7 +102,7 @@ export namespace LoggingWrapper {
       }
 
       this.log(level, `[${method}] ${url} HTTP/${version} ${statusCode} ${processTimeInMs.toFixed(3)}ms`)
-      this.log(level, `[REQUEST]`, { query: stringifiedQuery }, { params: stringifiedParams })
+      this.log(level, `[REQUEST]`, { query: stringifiedQuery }, { body: stringifiedBody })
       this.log(level, `[RESPONSE] ${stringifiedResponseData}`)
     }
 

@@ -1,6 +1,5 @@
 import { inject } from '@loopback/core'
-import { Request, RestBindings, get, response, ResponseObject, param, post, requestBody, HttpErrors } from '@loopback/rest'
-import { getWinstonLogger, LoggingWrapper } from '../logging-wrapper'
+import { get, response, param, post, requestBody, ResponseObject, RestBindings, Request } from '@loopback/rest'
 
 /**
  * OpenAPI response for ping()
@@ -29,8 +28,6 @@ const PING_RESPONSE: ResponseObject = {
   },
 }
 
-const logger = LoggingWrapper.getLogger(getWinstonLogger('ping.controller.ts'))
-
 /**
  * A simple controller to bounce back http requests
  */
@@ -41,11 +38,6 @@ export class PingController {
   @response(200, PING_RESPONSE)
   ping(@param.query.string('name') name: string | undefined): object {
     // Reply with a greeting, the current time, the url, and request headers
-    logger.error('Error message')
-    logger.warn('Warning message')
-    logger.info('Info message', 1, true, undefined, null, { a: 1 })
-    logger.debug('Debug message')
-    throw new HttpErrors[500]('asd')
     return {
       greeting: 'Hello from LoopBack',
       date: new Date(),
@@ -58,10 +50,6 @@ export class PingController {
   @response(200, PING_RESPONSE)
   pingById(@param.path.number('id') id: number, @param.query.string('name') name?: string): object {
     // Reply with a greeting, the current time, the url, and request headers
-    logger.error('Error message')
-    logger.warn('Warning message')
-    logger.info('Info message')
-    logger.debug('Debug message')
     return {
       greeting: 'Hello from LoopBack',
       date: new Date(),
@@ -90,10 +78,6 @@ export class PingController {
       name?: string
     },
   ): object {
-    logger.error('Error message')
-    logger.warn('Warning message')
-    logger.info('Info message')
-    logger.debug('Debug message')
     return {
       greeting: 'Hello from LoopBack',
       date: new Date(),

@@ -1,1 +1,1 @@
-export * from './user.repository';
+export * from './nullable-array-property.repository';

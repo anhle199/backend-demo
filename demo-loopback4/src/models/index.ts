@@ -1,1 +1,1 @@
-export * from './user.model';
+export * from './nullable-array-property.model';

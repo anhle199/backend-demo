@@ -21,6 +21,7 @@ module.exports = {
         semi: 'off',
         eqeqeq: 'off',
         'no-debugger': 'off',
+        '@typescript-eslint/naming-convention': 'off',
       },
     },
   ],

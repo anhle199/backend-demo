@@ -3,7 +3,7 @@ import { get, getModelSchemaRef, post, requestBody } from '@loopback/rest'
 import { NullableArrayProperty } from '../models/nullable-array-property.model'
 import { NullableArrayPropertyRepository } from '../repositories'
 
-export class ModellingController {
+export class NullableArrayPropertyController {
   constructor(@repository(NullableArrayPropertyRepository) private repo: NullableArrayPropertyRepository) {}
 
   @post('/modelling')

@@ -12,7 +12,6 @@ import {
 } from '@loopback/rest'
 import _ from 'lodash'
 import { getHttpAccessLogger, LoggingWrapper } from './logging-wrapper'
-
 const logger = getHttpAccessLogger('sequence.ts')
 
 export class LoggingSequence implements SequenceHandler {

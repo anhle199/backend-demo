@@ -80,8 +80,8 @@ export namespace LoggingWrapper {
       const processTimeInMs = (endTime[0] * 1000000000 + endTime[1]) / 1000000
 
       const stringifiedQuery = this.stringifyRequestResponseData(request.query)
-      const stringifiedParams = this.stringifyRequestResponseData(request.params)
-      let stringifiedResponseData = ''
+      const stringifiedParams = this.stringifyRequestResponseData(request.body)
+      let stringifiedResponseData: string | undefined = ''
 
       // cannot stringify to string
       if (error && error instanceof Error) {
@@ -102,14 +102,14 @@ export namespace LoggingWrapper {
       }
 
       this.log(level, `[${method}] ${url} HTTP/${version} ${statusCode} ${processTimeInMs.toFixed(3)}ms`)
-      this.log(level, `[REQUEST]`, { query: stringifiedQuery }, { params: stringifiedParams })
+      this.log(level, `[REQUEST]`, { query: stringifiedQuery }, { body: stringifiedParams })
       this.log(level, `[RESPONSE] ${stringifiedResponseData}`)
     }
 
-    private stringifyRequestResponseData(data: OperationArgs | TResponseData) {
+    private stringifyRequestResponseData(data: OperationArgs | TResponseData): string | undefined {
       let stringifiedData = ''
       try {
-        stringifiedData = JSON.stringify(data)
+        stringifiedData = JSON.stringify(data) // string or undefined
       } catch (err) {
         stringifiedData = '[error on stringifying]'
       }

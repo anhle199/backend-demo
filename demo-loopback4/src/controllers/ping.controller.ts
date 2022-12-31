@@ -35,7 +35,7 @@ export class PingController {
   constructor(@inject(RestBindings.Http.REQUEST) private req: Request) {}
 
   @get('/ping')
-  @response(200, PING_RESPONSE)
+  @response(204, {description: 'No content'})
   ping(@param.query.string('name') name: string | undefined): object {
     // Reply with a greeting, the current time, the url, and request headers
     return {

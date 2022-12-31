@@ -17,6 +17,7 @@ export class NullableArrayProperty extends Entity {
     },
     postgresql: {
       nullable: 'YES',
+      dataType: 'json',
     },
   })
   values?: string[] | null;
